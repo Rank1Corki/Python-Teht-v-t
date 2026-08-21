@@ -1,0 +1,8 @@
+while True:
+    vuosi = float(input("Anna vuosiluku:"))
+    karkausvuosi = vuosi / 4
+
+    if karkausvuosi % 1 !=0:
+        print("Ei ole karkaus vuosi")
+    else:
+        print("Karkausvuosi")

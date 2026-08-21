@@ -1,0 +1,27 @@
+
+while True:
+    sukupuoli = input("Mikä on teidän sukupuoli:"). lower()
+    hemoglobin = float(input("Kerro hemoglobin määrä: "))
+
+    #Miesten osa
+
+    if sukupuoli == ("mies") and hemoglobin < 134:
+        print("Sinun hemoglobiini arvo on alhainen.")
+        break
+    if sukupuoli == ("mies") and hemoglobin > 194:
+        print("Sinun hemoglobiini arvo on todella korkea.")
+        break
+    elif sukupuoli == ("mies"):
+        print("Sinun hemoglobiini arvo on normaali.")
+
+    #Naisten osa
+
+    if sukupuoli == ("nainen") and hemoglobin < 117:
+        print("Sinun hemoglobiini arvo on alhainen.")
+        break
+    if sukupuoli == ("nainen") and hemoglobin > 175:
+        print("Sinun hemoglobiini arvo on todella korkea.")
+        break
+    elif sukupuoli == ("nainen"):
+         print("Sinun hemoglobiini arvo on normaali.")
+         break
