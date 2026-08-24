@@ -1,0 +1,14 @@
+import random
+
+while True:
+    guess = float(input("Arvaa numero 0-10: "))
+    number = random.randint(0, 10)
+    if guess == number:
+        print("Arvasit oikein!!!")
+        break
+    if guess < number:
+        print("Arvaus oli liian pieni, arvaa uudestaan!")
+        continue
+    elif guess > number:
+        print("Arvaus oli liian suuri, arvaa uudestaan!")
+        continue

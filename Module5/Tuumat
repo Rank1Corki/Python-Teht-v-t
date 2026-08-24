@@ -1,0 +1,9 @@
+tuuma = float()
+
+while True:
+    numero = float(input("Anna tuuma: "))
+    tuuma = numero * 2.54
+    if numero < 0:
+        break
+    print(f"{numero} tuumaa on {tuuma}")
+   
