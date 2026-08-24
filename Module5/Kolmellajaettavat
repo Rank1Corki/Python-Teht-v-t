@@ -1,0 +1,6 @@
+i = 0
+total = 0
+while i < 1000:
+    print(i)
+    i += 3
+    total = i + total
