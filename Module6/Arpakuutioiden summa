@@ -1,0 +1,9 @@
+import random
+total = 0
+nopat = []
+number = int(input("Anna noppien määrä: "))
+for _ in range(number):
+    noppa = random.randint(1, 6)
+    total += noppa
+
+print(total)  

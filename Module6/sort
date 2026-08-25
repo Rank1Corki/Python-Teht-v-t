@@ -1,0 +1,12 @@
+numbers = []
+
+while True:    
+    value = input("Anna numero: ")
+    if value == "":
+        break
+    numbers.append(int(value))
+   
+res = sorted(numbers, reverse=True)[:5]
+print(res)
+numbers.clear()
+        

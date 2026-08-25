@@ -1,0 +1,18 @@
+kayttajatunnus = "python"
+salasana = "rules"
+i = 0
+
+while True:
+    tunnus = input("Anna tunnus: ")
+    sala = input("Anna salasana: ")
+    i += 1
+
+    if sala == salasana and tunnus == kayttajatunnus:
+        print("Tervetuloa.")
+        break
+    elif i == 5:
+        print("Pääsy Evätty!")
+        break
+    else:
+        print("Yritä Uudelleen.")
+

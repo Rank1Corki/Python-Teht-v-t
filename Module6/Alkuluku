@@ -1,0 +1,19 @@
+numero = int(input("Anna luku: "))
+
+jaollinen = True
+
+if numero == 0 or numero == 1:
+    print(numero, "Ei ole alkuluku")
+    
+elif numero > 1:
+    for i in range(2, numero):
+        if numero % i == 0:
+            jaollinen = False
+            break
+
+    if jaollinen:
+        print("On alkuluku")
+    else:
+        print("Ei ole alkuluku")
+
+    

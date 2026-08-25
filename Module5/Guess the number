@@ -6,9 +6,7 @@ while True:
     if guess == number:
         print("Arvasit oikein!!!")
         break
-    if guess < number:
+    elif guess < number:
         print("Arvaus oli liian pieni, arvaa uudestaan!")
-        continue
-    elif guess > number:
+    else:
         print("Arvaus oli liian suuri, arvaa uudestaan!")
-        continue
