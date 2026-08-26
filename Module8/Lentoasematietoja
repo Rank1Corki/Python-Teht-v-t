@@ -1,0 +1,29 @@
+from pick import pick
+
+
+
+lentoasemat = {
+    "EFHK": "Helsinki-Vantaan lentoasema"
+}
+
+while True:
+    title = 'Lentoasemantiedot: '
+    options = ['Hae', 'Uusi lentoasema', 'Lopeta']
+
+    option, index = pick(options, title, indicator='=>', default_index=0)
+
+    if option == "Hae":
+        koodi = input("Anna ICAO-koodi: ").upper()
+        if koodi in lentoasemat:
+            print(lentoasemat[koodi])
+        else:
+            print("Lentoasemaa ei löytynyt")
+
+    elif option == "Uusi lentoasema":
+        koodi = input("Anna ICAO-koodi: ").upper()
+        nimi = input("Anna lentoaseman nimi: ")
+
+        lentoasemat[koodi] = nimi
+
+    elif option == "Lopeta":
+        break

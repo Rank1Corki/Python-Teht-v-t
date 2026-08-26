@@ -1,0 +1,17 @@
+
+
+def remove_odd(lista):
+    uusi_lista = []
+
+    for numero in lista:
+        if numero % 2 == 0:
+            uusi_lista.append(numero)
+    
+    return uusi_lista 
+
+
+lista = [1, 9, 4, 7, 6, 5, 8, 3]
+print(f"originaalinen lista: {lista}")
+
+res = remove_odd(lista)
+print(f"ilman karsittuja numeroita: {res}")

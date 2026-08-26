@@ -1,0 +1,15 @@
+
+def gallonat_litroiksi(gallonat):
+    litrat = gallonat * 3.785
+    return litrat
+
+while True:
+    numero = float(input("Anna gallona: "))
+
+    if numero < 0:
+        break
+
+    litrat = gallonat_litroiksi(numero)
+
+    print(f"{numero} gallonaa on {litrat} litraa")
+   

@@ -1,0 +1,13 @@
+import random
+
+def noppa(tahkot):
+    numero = random.randint(1, tahkot)
+    return numero
+    
+tahkot1 = int(input("Kuinka monta sivua nopassa on: "))
+
+while True:
+    numero = noppa(tahkot1)
+    print(numero)
+    if numero == tahkot1:
+        break

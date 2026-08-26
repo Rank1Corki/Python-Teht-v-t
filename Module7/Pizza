@@ -1,0 +1,22 @@
+import math
+
+def yksikkohinta(halkaisija, hinta):
+    halkaisija = halkaisija / 100
+    säde = halkaisija / 2
+    alue = math.pi * säde**2
+    yksikko_hinta = hinta / alue
+    return yksikko_hinta
+
+halkaisija = float(input("Anna halkaisija: "))
+hinta = float(input("Anna hinta: "))
+
+halkaisija1 = float(input("Anna halkaisija: "))
+hinta1 = float(input("Anna hinta: "))
+
+pizza_hinta1 = yksikkohinta(halkaisija, hinta)
+pizza_hinta2 = yksikkohinta(halkaisija1, hinta1)
+
+if pizza_hinta1 < pizza_hinta2:
+    print(f"Pizza 1 on halvempi hinta: {pizza_hinta1}")
+else:
+    print(f"Pizza 2 on halvempi hinta: {pizza_hinta2}")

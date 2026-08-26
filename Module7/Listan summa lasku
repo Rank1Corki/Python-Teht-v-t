@@ -1,0 +1,8 @@
+lista = [1, 2, 3, 3, 4, 5]
+
+def summa(lista):
+    total = sum(lista)
+    return total
+
+total = summa(lista)
+print(total)
