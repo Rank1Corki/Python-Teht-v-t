@@ -1,32 +1,42 @@
 class Auto:
-
-    def __init__(self, rekisteri, huippunopeus=300, nopeus = 15, matka=15):
-        self.rekisteri = rekisteri
+    def __init__(self, rekisteritunnus, huippunopeus):
+        self.rekisteritunnus = rekisteritunnus
         self.huippunopeus = huippunopeus
-        self.nopeus = nopeus
-        self.matka = matka
+        self.nopeus = 0
+        self.matka = 0
 
-    def saa_nopeus(self):
-        nopeudenmuutos = input("Anna auton nopeuden muutos: ")
-        muutos = int(nopeudenmuutos)
-        uusi_nopeus = self.nopeus + muutos
+    def kiihdyta(self, muutos):
+        self.nopeus += muutos
 
-        if uusi_nopeus > self.huippunopeus:
-            uusi_nopeus = self.huippunopeus
-            print(f"Uusi nopeus on: {uusi_nopeus}")
+        if self.nopeus > self.huippunopeus:
+            self.nopeus = self.huippunopeus
 
-        elif uusi_nopeus < 0: 
-            uusi_nopeus = 0
-            print(f"Auto pysähtyi uusi nopeus on: {uusi_nopeus}")
+        if self.nopeus < 0:
+            self.nopeus = 0
+
+    def kulje(self, aika):
+        self.matka += aika * self.nopeus
         
-        else:
-            self.nopeus = uusi_nopeus
-            print(f"Uusi nopeus on: {uusi_nopeus}")
 
+auto = Auto("ABC-123", 142)
 
+print(auto.rekisteritunnus)
+print(auto.huippunopeus)
+print(auto.nopeus)
+print(auto.matka)
 
-auto1 = Auto("ABC-123", huippunopeus=300)
+auto.kiihdyta(30)
+auto.kulje(1.5)
+print(auto.matka)
+auto.kiihdyta(70)
+auto.kulje(2)
+print(auto.matka)
+auto.kiihdyta(50)
+auto.kulje(1.5)
+print(auto.matka)
 
-auto1.saa_nopeus()   
+print(f"Nopeus: {auto.nopeus} km/h")
 
-print(f"Auton tiedot: Huippunoppeus {auto1.huippunopeus} KM/H, {auto1.rekisteri}")
+auto.kiihdyta(-200)
+
+print(f"Nopeus hätäjarrutuksen jälkeen: {auto.nopeus} km/h")
