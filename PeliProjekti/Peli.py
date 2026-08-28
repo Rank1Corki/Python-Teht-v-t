@@ -1,6 +1,7 @@
 nimi = input("Mikä sinun nimesi on: ")
 ikä = int(input("Kuinka vanha olet: "))
 
+print(nimi, ikä)
 
 while True:
     if ikä < 12:
