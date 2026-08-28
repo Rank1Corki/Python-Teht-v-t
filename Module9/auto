@@ -1,9 +1,14 @@
+import random
+
 class Auto:
+
+
     def __init__(self, rekisteritunnus, huippunopeus):
         self.rekisteritunnus = rekisteritunnus
         self.huippunopeus = huippunopeus
         self.nopeus = 0
         self.matka = 0
+
 
     def kiihdyta(self, muutos):
         self.nopeus += muutos
@@ -16,27 +21,25 @@ class Auto:
 
     def kulje(self, aika):
         self.matka += aika * self.nopeus
-        
 
-auto = Auto("ABC-123", 142)
+autot = []
 
-print(auto.rekisteritunnus)
-print(auto.huippunopeus)
-print(auto.nopeus)
-print(auto.matka)
+def uudet_autot():
+    for i in range(1, 11): 
+        autorand = Auto(f"ABC-{i}", random.randint(100, 200))
+        autot.append(autorand)
 
-auto.kiihdyta(30)
-auto.kulje(1.5)
-print(auto.matka)
-auto.kiihdyta(70)
-auto.kulje(2)
-print(auto.matka)
-auto.kiihdyta(50)
-auto.kulje(1.5)
-print(auto.matka)
 
-print(f"Nopeus: {auto.nopeus} km/h")
+uudet_autot()
 
-auto.kiihdyta(-200)
 
-print(f"Nopeus hätäjarrutuksen jälkeen: {auto.nopeus} km/h")
+ensimmainen_auto = autot[0]
+print(f"Rekisteri: {ensimmainen_auto.rekisteritunnus}")
+print(f"Huippunopeus: {ensimmainen_auto.huippunopeus} km/h")
+print(f"Nopeus alussa: {ensimmainen_auto.nopeus} km/h")
+
+
+ensimmainen_auto.kiihdyta(50)
+ensimmainen_auto.kulje(2)
+print(f"Nopeus kiihdytyksen jälkeen: {ensimmainen_auto.nopeus} km/h")
+print(f"Kuljettu matka: {ensimmainen_auto.matka} km")
