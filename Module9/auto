@@ -2,13 +2,11 @@ import random
 
 class Auto:
 
-
     def __init__(self, rekisteritunnus, huippunopeus):
         self.rekisteritunnus = rekisteritunnus
         self.huippunopeus = huippunopeus
         self.nopeus = 0
         self.matka = 0
-
 
     def kiihdyta(self, muutos):
         self.nopeus += muutos
@@ -32,14 +30,17 @@ def uudet_autot():
 
 uudet_autot()
 
+while True:
+    for auto in autot:
+        arvottu_muutos = random.randint(-10, 15)
+        auto.kiihdyta(arvottu_muutos)
+        auto.kulje(1)
+    
+    if auto.matka >= 100000:
+        break
 
-ensimmainen_auto = autot[0]
-print(f"Rekisteri: {ensimmainen_auto.rekisteritunnus}")
-print(f"Huippunopeus: {ensimmainen_auto.huippunopeus} km/h")
-print(f"Nopeus alussa: {ensimmainen_auto.nopeus} km/h")
 
-
-ensimmainen_auto.kiihdyta(50)
-ensimmainen_auto.kulje(2)
-print(f"Nopeus kiihdytyksen jälkeen: {ensimmainen_auto.nopeus} km/h")
-print(f"Kuljettu matka: {ensimmainen_auto.matka} km")
+print(f"{'Rekisteri':<12} | {'Huippunopeus':<15} | {'Nopeus':<10} | {'Matka (km)':<12}")
+print("-" * 60)
+for auto in autot:
+    print(f"{auto.rekisteritunnus:<12} | {auto.huippunopeus:<15} | {auto.nopeus:<10} | {auto.matka:<12.1f}")
