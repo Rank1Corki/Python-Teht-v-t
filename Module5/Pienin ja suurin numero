@@ -1,11 +1,10 @@
 a = list()
 
-while True:
-    try:        
+while True:      
         numero = float(input("Anna numero: "))
         a.append(numero)
         res = min(a)
         re = max(a)
-    except ValueError:
-        print(f"Pienin numero: {res} ja suurin: {re}")
-        a.clear()
+        if numero == "":
+            print(f"Pienin numero: {res} ja suurin: {re}")
+            break

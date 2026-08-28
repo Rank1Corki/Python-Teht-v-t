@@ -2,7 +2,7 @@ import random
 
 print("Kolminumeroinen koodi: ")
 for _ in range(3):
-    print(random.randint(1, 6,), end="")
+    print(random.randint(1, 6,), end=" ")
 
 print("\n")
 
