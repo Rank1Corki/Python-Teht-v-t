@@ -8,24 +8,30 @@ class Hissi:
     def kerros_ylos(self):
         if self.kerros < self.ylin:
             self.kerros += 1
-            print(f"Hissi on nyt {self.kerros} kerroksessa.")
+        print(f"Hissi on nyt {self.kerros} kerroksessa.")
 
     def kerros_alas(self):
         if self.kerros > self.alin:
             self.kerros -= 1
-            print(f"Hissi on nyt {self.kerros} kerroksessa.")
+        print(f"Hissi on nyt {self.kerros} kerroksessa.")
 
-    def siirry_kerrokseen(self):
-        while True:
-            numero = int(input("Anna kerros: "))
-            for _ in range(numero):
-                if numero < self.kerros:
-                    self.kerros_alas(numero)
-                elif numero > self.kerros:
-                    self.kerros_ylos(numero)
-                else:
-                    print("Hissi ei voi mennä tohon kerrokseen.")
+    def siirry_kerrokseen(self, kohde):
+        if kohde < self.alin or kohde > self.ylin:
+            print(f"Kerros {kohde} ei ole olemassa.")
+            return
+
+        while self.kerros < kohde:
+            self.kerros_ylos()
+
+        while self.kerros > kohde:
+            self.kerros_alas()
 
 
-hissi = Hissi(0, 5)
-print("Hissi on nyt {hissi.}")
+
+if __name__ == "__main__":
+    hissi = Hissi(1, 10)
+    hissi.siirry_kerrokseen(5)
+
+    print("Siirrytään takaisin alimpaan kerrokseen.")
+    hissi.siirry_kerrokseen(hissi.alin)
+    print(f"Hissi on nyt alimmassa kerroksessa")

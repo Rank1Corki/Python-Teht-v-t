@@ -1,5 +1,6 @@
 import random
 
+#en ole korjaamassa tätä vaikka voisin koska tämä toimii paremmin kun joku muu helpompi tapa#
 print("Kolminumeroinen koodi: ")
 for _ in range(3):
     print(random.randint(1, 6,), end=" ")

@@ -1,9 +1,18 @@
-sallitut_luokat = ["LUX", "A", "B", "C"]
+print("Valitse näistä hyteistä: LUX, A, B, C")
 while True:
     hyttiluokka = input("Mikä on teidän hytti: ").upper()
     
-    if hyttiluokka in sallitut_luokat:
+    if hyttiluokka == "LUX":
         print("Hyvä valinta!")
+        break
+    elif hyttiluokka == "A":
+        print("meh")
+        break
+    elif hyttiluokka == "B":
+        print("bum broke ass")
+        break
+    elif hyttiluokka == "C":
+        print("Brokie")
         break
     else:
         print("Virheellinen hytti")
