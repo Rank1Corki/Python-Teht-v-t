@@ -1,19 +1,17 @@
 import random
 
 class Auto:
-
     def __init__(self, rekisteritunnus, huippunopeus):
         self.rekisteritunnus = rekisteritunnus
         self.huippunopeus = huippunopeus
         self.nopeus = 0
         self.matka = 0
+        self.aika = 0 
 
     def kiihdyta(self, muutos):
         self.nopeus += muutos
-
         if self.nopeus > self.huippunopeus:
             self.nopeus = self.huippunopeus
-
         if self.nopeus < 0:
             self.nopeus = 0
 
@@ -27,20 +25,27 @@ def uudet_autot():
         autorand = Auto(f"ABC-{i}", random.randint(100, 200))
         autot.append(autorand)
 
-
 uudet_autot()
 
 while True:
-    for auto in autot:
-        arvottu_muutos = random.randint(-10, 15)
-        auto.kiihdyta(arvottu_muutos)
-        auto.kulje(1)
+    kaikki_maalissa = True  
     
-    if auto.matka >= 100000:
+    for auto in autot:
+        if auto.matka < 10000:
+            kaikki_maalissa = False 
+            arvottu_muutos = random.randint(-10, 15)
+            auto.kiihdyta(arvottu_muutos)
+            auto.kulje(1)
+            auto.aika += 1 
+            
+    if kaikki_maalissa:
         break
 
 
-print(f"{'Rekisteri':<12} | {'Huippunopeus':<15} | {'Nopeus':<10} | {'Matka (km)':<12}")
+autot.sort(key=lambda x: x.aika)
+
+
+print(f"{'Sija':<5} | {'Rekisteri':<10} | {'Huippunopeus':<13} | {'Aika (h)':<8} | {'Matka (km)':<10}")
 print("-" * 60)
-for auto in autot:
-    print(f"{auto.rekisteritunnus:<12} | {auto.huippunopeus:<15} | {auto.nopeus:<10} | {auto.matka:<12.1f}")
+for sijoitus, auto in enumerate(autot, 1):
+    print(f"{sijoitus:<5} | {auto.rekisteritunnus:<10} | {auto.huippunopeus:<13} | {auto.aika:<8} | {auto.matka:<10.1f}")
