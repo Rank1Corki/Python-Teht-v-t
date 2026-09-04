@@ -74,4 +74,4 @@ while not eka_maalissa:
 
 his.autot.sort(key=lambda x: x.matka, reverse=True)
 
-print(his.tulosta_tilanne())
+his.tulosta_tilanne()
