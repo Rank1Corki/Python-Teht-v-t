@@ -4,7 +4,7 @@ class Auto:
     def __init__(self, rekisteritunnus, huippunopeus):
         self.rekisteritunnus = rekisteritunnus
         self.huippunopeus = huippunopeus
-        self.nopeus = 0
+        self.nopeus = 1
         self.matka = 0
         self.aika = 0 
 
@@ -13,39 +13,61 @@ class Auto:
         if self.nopeus > self.huippunopeus:
             self.nopeus = self.huippunopeus
         if self.nopeus < 0:
-            self.nopeus = 0
+            self.nopeus = 1
 
     def kulje(self, aika):
         self.matka += aika * self.nopeus
 
-autot = []
+
+class Kilpailu:
+    auto = Auto
+    def __init__(self, kilpailun_nimi, pituus_km):
+        self.kilpailun_nimi = kilpailun_nimi
+        self.pituus_km = pituus_km
+        self.autot = []
+
+    def tunti_kuluu(self):
+        for auto in self.autot:
+            rando = random.randint(-10, 15)
+            auto.kiihdyta(rando)
+            auto.kulje(1)
+
+
+
+
+his = Kilpailu("Pitkä kilpailu", 8000)
 
 def uudet_autot():
     for i in range(1, 11): 
         autorand = Auto(f"ABC-{i}", random.randint(100, 200))
-        autot.append(autorand)
+        his.autot.append(autorand)
 
 uudet_autot()
 
-while True:
-    kaikki_maalissa = True  
+eka_maalissa = False
+
+while not eka_maalissa:
     
-    for auto in autot:
-        if auto.matka < 10000:
-            kaikki_maalissa = False 
-            arvottu_muutos = random.randint(-10, 15)
-            auto.kiihdyta(arvottu_muutos)
-            auto.kulje(1)
-            auto.aika += 1 
-            
-    if kaikki_maalissa:
+    his.tunti_kuluu()
+
+    for auto in his.autot:
+        auto.aika += 1
+
+    
+    for auto in his.autot:
+        if auto.matka >= his.pituus_km:
+           eka_maalissa = True
+
+    
+    if auto.matka >= his.pituus_km:
+        eka_maalissa = True
         break
 
 
-autot.sort(key=lambda x: x.aika)
+his.autot.sort(key=lambda x: x.matka, reverse=True)
 
-
-print(f"{'Sija':<5} | {'Rekisteri':<10} | {'Huippunopeus':<13} | {'Aika (h)':<8} | {'Matka (km)':<10}")
+print(his.kilpailun_nimi)
+print(f"{'Sija':<5} | {'Rekisteri':<10} | {'Huippunopeus':<13} | {'Matka (km)':<10}")
 print("-" * 60)
-for sijoitus, auto in enumerate(autot, 1):
-    print(f"{sijoitus:<5} | {auto.rekisteritunnus:<10} | {auto.huippunopeus:<13} | {auto.aika:<8} | {auto.matka:<10.1f}")
+for sijoitus, auto in enumerate(his.autot, 1):
+    print(f"{sijoitus:<5} | {auto.rekisteritunnus:<10} | {auto.huippunopeus:<13} | {auto.matka:<10.1f}")

@@ -28,6 +28,7 @@ class Hissi:
 
 class Talo:
     his = Hissi(1, 10)
+    palohälytys = False
     def __init__(self,alin_kerros, ylin_kerros, hissien_lkm=5):
         self.alin = alin_kerros
         self.ylin = ylin_kerros
@@ -46,13 +47,17 @@ class Talo:
         while self.his.kerros > kohdekerros:
             self.his.kerros_alas()
 
+    def palohälytys(self):
+        self.palohälytys = True
+        while self.palohälytys == True:
+            self.his.siirry_kerrokseen(self.alin)
 
 if __name__ == "__main__":
     talo = Talo(1, 10, 4)
     talo.aja_hissiä(1, 5)
 
-    print("Siirrytään takaisin alimpaan kerrokseen.")
-    talo.aja_hissiä(1, talo.alin)
+    print("Palohälytys.")
+    talo.palohälytys()
     print(f"Hissi on nyt alimmassa kerroksessa")
 
 
