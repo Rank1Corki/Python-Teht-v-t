@@ -33,9 +33,17 @@ class Kilpailu:
             auto.kulje(1)
 
 
+    def tulosta_tilanne(self):
+        print(self.kilpailun_nimi)
+        print(f"{'Sija':<5} | {'Rekisteri':<10} | {'Huippunopeus':<13} | {'Matka (km)':<10}")
+        print("-" * 60)
+        for sijoitus, auto in enumerate(self.autot, 1):
+            print(f"{sijoitus:<5} | {auto.rekisteritunnus:<10} | {auto.huippunopeus:<13} | {auto.matka:<10.1f}")
 
 
-his = Kilpailu("Pitkä kilpailu", 8000)
+
+
+his = Kilpailu("Suuri romuralli", 8000)
 
 def uudet_autot():
     for i in range(1, 11): 
@@ -66,8 +74,4 @@ while not eka_maalissa:
 
 his.autot.sort(key=lambda x: x.matka, reverse=True)
 
-print(his.kilpailun_nimi)
-print(f"{'Sija':<5} | {'Rekisteri':<10} | {'Huippunopeus':<13} | {'Matka (km)':<10}")
-print("-" * 60)
-for sijoitus, auto in enumerate(his.autot, 1):
-    print(f"{sijoitus:<5} | {auto.rekisteritunnus:<10} | {auto.huippunopeus:<13} | {auto.matka:<10.1f}")
+print(his.tulosta_tilanne())
