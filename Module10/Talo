@@ -26,12 +26,33 @@ class Hissi:
         while self.kerros > kohde:
             self.kerros_alas()
 
+class Talo:
+    his = Hissi(1, 10)
+    def __init__(self,alin_kerros, ylin_kerros, hissien_lkm=5):
+        self.alin = alin_kerros
+        self.ylin = ylin_kerros
+        self.hissit = []
+
+        for _ in range(hissien_lkm):
+            self.hissit.append(Hissi(self.alin, self.ylin))
+
+    def aja_hissiä(self, hissin_numero, kohdekerros):
+        if kohdekerros < self.alin or kohdekerros > self.ylin:
+            print(f"Kerros {kohdekerros} ei ole olemassa.")
+            return
+        while self.his.kerros < kohdekerros:
+            self.his.kerros_ylos()
+
+        while self.his.kerros > kohdekerros:
+            self.his.kerros_alas()
 
 
 if __name__ == "__main__":
-    hissi = Hissi(1, 10)
-    hissi.siirry_kerrokseen(5)
+    talo = Talo(1, 10, 4)
+    talo.aja_hissiä(1, 5)
 
     print("Siirrytään takaisin alimpaan kerrokseen.")
-    hissi.siirry_kerrokseen(hissi.alin)
+    talo.aja_hissiä(1, talo.alin)
     print(f"Hissi on nyt alimmassa kerroksessa")
+
+
