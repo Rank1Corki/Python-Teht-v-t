@@ -1,0 +1,48 @@
+class Auto:
+    def __init__(self, rekisteritunnus, huippunopeus):
+        self.rekisteritunnus = rekisteritunnus
+        self.huippunopeus = huippunopeus
+        self.nopeus = 0
+        self.matka = 0
+
+    def kiihdyta(self, muutos):
+        self.nopeus += muutos
+        if self.nopeus > self.huippunopeus:
+            self.nopeus = self.huippunopeus
+        if self.nopeus < 0:
+            self.nopeus = 0
+
+    def kulje(self, aika):
+        self.matka += aika * self.nopeus
+
+
+
+class Sahkoauto(Auto):
+    def __init__(self, rekisteritunnus, huippunopeus, akkukapasiteetti):
+        super().__init__(rekisteritunnus, huippunopeus)
+        self.akkukapasiteetti = akkukapasiteetti
+
+
+class Polttomoottoriauto(Auto):
+    def __init__(self, rekisteritunnus, huippunopeus, tankin_koko):
+        super().__init__(rekisteritunnus, huippunopeus)
+        self.tankin_koko = tankin_koko
+
+
+
+
+if __name__ == "__main__":
+    sahko = Sahkoauto("ABC-15", 180, 52.5)
+    bensa = Polttomoottoriauto("ACD-123", 162, 32.3)
+
+    # Set speeds
+    sahko.kiihdyta(150)
+    bensa.kiihdyta(150)
+
+    # Drive for three hours
+    sahko.kulje(3)
+    bensa.kulje(3)
+
+    # Print out the kilometer counters
+    print(f"{sahko.rekisteritunnus}: {sahko.matka} km")
+    print(f"{bensa.rekisteritunnus}: {bensa.matka} km")

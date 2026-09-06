@@ -1,0 +1,2 @@
+eetu;100;0;20;1;Kammio [0, 20] S1
+Harmaa kivi;2.0

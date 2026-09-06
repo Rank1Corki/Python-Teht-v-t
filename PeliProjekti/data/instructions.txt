@@ -1,0 +1,5 @@
+=== OHJEET ===
+- Liiku valmiissa tunneleissa tai louhi hakkua heiluttaen uusia reittejä.
+- Seinän murtaminen vie 10 energiaa ja tuottaa esineen maahan.
+- Muista poimia maassa kimmeltävät esineet reppuusi!
+- Lepää nuotiolla, kun energiasi käy vähiin.
