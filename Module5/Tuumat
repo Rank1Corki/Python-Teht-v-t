@@ -5,5 +5,5 @@ while True:
     tuuma = numero * 2.54
     if numero < 0:
         break
-    print(f"{numero} tuumaa on {tuuma}")
+    print(f"{numero} tuumaa on {tuuma} cm")
    
