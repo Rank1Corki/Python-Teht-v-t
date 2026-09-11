@@ -4,8 +4,6 @@ from models.item import Item
 from models.room import Room
 from models.player import Player
 
-# --- POLUT JA ASETUKSET ---
-# Lukitsee kansion aina suoraan tämän scriptin omaan kansioon:
 SKRIPTIN_KANSIO = os.path.dirname(os.path.abspath(__file__))
 DATA_KANSIO = os.path.join(SKRIPTIN_KANSIO, "data")
 
@@ -124,7 +122,7 @@ def lataa_peli() -> Player | None:
 def louhi_ja_liiku(pelaaja: Player):
     """Louhii uuden huoneen tai siirtyy olemassa olevaan, jos seinä on jo auki."""
     if pelaaja.energia < 10:
-        print("\nOlet liian poikki heiluttamaan hakkua! Lepää hetki nuotiolla.")
+        print("\nEnergia on liian alhainen heiluttamaan hakkua! Lepää hetki nuotiolla.")
         return
 
     suunta_syote = input("\nMihin suuntaan haluat louhia? (pohjoinen / etela / ita / lansi / alas): ").strip().lower()
@@ -134,37 +132,36 @@ def louhi_ja_liiku(pelaaja: Player):
         print("Tuntematon suunta.")
         return
 
-    # Jos suuntaan on jo kaivettu tunneli, liikutaan sinne suoraan
+
     if suunta in pelaaja.location.exits:
         print("\nTähän suuntaan on jo avoin tunneli! Siirrytään sinne...")
         pelaaja.move(pelaaja.location.exits[suunta])
         _paivita_koordinaatit(pelaaja, suunta)
         return
 
-    # Louhitaan uusi huone
     pelaaja.energia -= 10
-    print("\n*KLIK-KLANG* Isket hakulla kalliota ja murrat reitin eteenpäin...")
+    print("\nIsket hakulla kalliota ja murrat reitin eteenpäin...")
 
     _paivita_koordinaatit(pelaaja, suunta)
     if suunta == "alas":
         print(f"Kaivoit kuilun syvemmälle! Olet nyt syvyystasolla {pelaaja.syvyys}.")
 
-    # Luodaan uusi Room-olio ja kytketään ovet kahteen suuntaan
+
     uusi_huone = Room(f"Kammio [{pelaaja.x}, {pelaaja.y}] S{pelaaja.syvyys}")
     pelaaja.location.add_exit(suunta, uusi_huone)
     uusi_huone.add_exit(VASTASUUNNAT[suunta], pelaaja.location)
 
-    # UML-metodi: move
+
     pelaaja.move(uusi_huone)
 
-    # Arvotaan löytö syvyystason mukaan
+
     mahdolliset = [l for l in LÖYDÖT if pelaaja.syvyys >= l["min_syvyys"]]
     painot = [l["painokerroin"] for l in mahdolliset]
     saalis = random.choices(mahdolliset, weights=painot, k=1)[0]
 
     print(saalis["viesti"])
     
-    # Asetetaan malmi huoneen esineeksi (UML: Room -> item: Item)
+
     uusi_huone.item = Item(saalis["nimi"], saalis["paino_kg"])
     print("Vinkki: Esine jäi maahan. Käytä toimintoa 3 poimiaksesi sen reppuun!")
 
@@ -178,7 +175,6 @@ def _paivita_koordinaatit(pelaaja: Player, suunta: str):
 
 
 def poimi_esine_maasta(pelaaja: Player):
-    """Käyttää Player-luokan UML-metodia collect_item()"""
     esine = pelaaja.collect_item()
     if esine:
         print(f"\nPoimit maasta esineen: {esine.name} ({esine.weight:.1f} kg)")
@@ -187,7 +183,6 @@ def poimi_esine_maasta(pelaaja: Player):
 
 
 def lisaa_esine_manuaalisesti(pelaaja: Player):
-    """Tehtävänannon vaatimus vapaan syötteen lisäämisestä reppuun."""
     nimi = input("\nKirjoita esineen nimi, jonka haluat heittää reppuun: ").strip()
     if nimi:
         pelaaja.items.append(Item(nimi, 1.0))
@@ -197,7 +192,7 @@ def lisaa_esine_manuaalisesti(pelaaja: Player):
 
 
 def nayta_reppu(pelaaja: Player):
-    """Tulostaa pelaaja-olion items-listan sisällön."""
+    """Tulostaa pelaajan items-listan sisällön."""
     print("\n--- REPUN SISÄLTÖ ---")
     if not pelaaja.items:
         print("Reppusi on tyhjä.")
@@ -231,7 +226,7 @@ def main():
     pelaaja = None
     aloitushuone = Room("Kaivoksen suuaukko [0, 0] S1")
 
-    # Kysytään tallennuksen lataamista, jos tiedosto löytyy
+    # Kysytään haluaako pelaaja käyttää vanhaa tallennusta
     if os.path.exists(TALLENNUS_POLKU):
         valinta = input("\nLöydettiin aiempi tallennus! Haluatko jatkaa sitä? (k/e): ").strip().lower()
         if valinta in ("k", "kylla", "y"):
@@ -239,7 +234,7 @@ def main():
             if pelaaja:
                 print(f"\nTervetuloa takaisin, {pelaaja.name}!")
 
-    # Jos ei ladattu, luodaan uusi pelaaja
+    # Jos ei ole vanhaa tallenusta
     if not pelaaja:
         nimi = input("\nAnna kaivosmiehen nimi: ").strip()
         while True:
@@ -271,7 +266,7 @@ def main():
         print("1. Louhi tietä eteenpäin (Liiku / Kaiva)")
         print("2. Tarkastele reppua")
         print("3. Poimi esine maasta (collect_item)")
-        print("4. Lisää esine manuaalisesti (tehtävävaatimus)")
+        print("4. Lisää esine manuaalisesti")
         print("5. Katso tilanne ja koordinaatit")
         print("6. Lepää ja palauta energia")
         print("7. Tallenna peli")
