@@ -1,7 +1,5 @@
-class Item:
-    """pelin esine."""
-
-    def __init__(self, name: str, weight: float, category: str = "materiaali"):
+class Item: 
+    def __init__(self, name: str, weight: float):
         self.name = name
         self.weight = weight
         self.category = category

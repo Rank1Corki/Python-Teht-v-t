@@ -4,7 +4,6 @@ from models.item import Item
 from models.room import Room
 from models.player import Player
 
-# Tiedostopolut ja tallennusasetukset
 SKRIPTIN_KANSIO = os.path.dirname(os.path.abspath(__file__))
 DATA_KANSIO = os.path.join(SKRIPTIN_KANSIO, "data")
 
@@ -183,7 +182,7 @@ def paivita_koordinaatit(pelaaja: Player, suunta: str) -> None:
 def louhi_ja_liiku(pelaaja: Player) -> None:
     """Mahdollistaa siirtymisen tai uuden huoneen louhimisen kartalle."""
     if pelaaja.energia < 10:
-        print("\nOlet liian väsynyt kaivamaan. Lepää hetki tutkimusasemalla!")
+        print("\nEnergia on liian alhainen heiluttamaan hakkua! Lepää hetki nuotiolla.")
         return
 
     suunta_syote = input("\nMihin suuntaan haluat liikkua/louhia? (pohjoinen/etela/ita/lansi/alas/ylos): ").strip().lower()
@@ -193,98 +192,49 @@ def louhi_ja_liiku(pelaaja: Player) -> None:
         print("Tuntematon suunta.")
         return
 
-    # Jos suuntaan on jo avoin kulkureitti, liikutaan sinne
+
     if suunta in pelaaja.location.exits:
         print("\nReitti on jo valmiina, siirrytään käytävää pitkin...")
         pelaaja.move(pelaaja.location.exits[suunta])
         paivita_koordinaatit(pelaaja, suunta)
         return
 
-    # Uuden huoneen louhinta kuluttaa energiaa
     pelaaja.energia -= 10
-    print("\nMurskaat kalliota ja avaat uuden tunneliosuuden...")
-    paivita_koordinaatit(pelaaja, suunta)
+    print("\nIsket hakulla kalliota ja murrat reitin eteenpäin...")
 
-    uusi_huone = Room(f"Tutkimusalue [{pelaaja.x}, {pelaaja.y}] Syvyys {pelaaja.syvyys}")
+    _paivita_koordinaatit(pelaaja, suunta)
+    if suunta == "alas":
+        print(f"Kaivoit kuilun syvemmälle! Olet nyt syvyystasolla {pelaaja.syvyys}.")
+
+
+    uusi_huone = Room(f"Kammio [{pelaaja.x}, {pelaaja.y}] S{pelaaja.syvyys}")
     pelaaja.location.add_exit(suunta, uusi_huone)
     uusi_huone.add_exit(VASTASUUNNAT[suunta], pelaaja.location)
+
+
     pelaaja.move(uusi_huone)
 
-    # Arvotaan mahdollinen materiaali tai jäte syvyyden perusteella
-    mahdolliset = []
-    for loyto in LÖYDÖT:
-        if pelaaja.syvyys >= loyto["min_syvyys"]:
-            mahdolliset.append(loyto)
 
-    painot = []
-    for loyto in mahdolliset:
-        painot.append(loyto["painokerroin"])
+    mahdolliset = [l for l in LÖYDÖT if pelaaja.syvyys >= l["min_syvyys"]]
+    painot = [l["painokerroin"] for l in mahdolliset]
     saalis = random.choices(mahdolliset, weights=painot, k=1)[0]
 
     print(saalis["viesti"])
-    uusi_huone.item = Item(saalis["nimi"], saalis["paino_kg"], saalis["kategoria"])
-    print("Huoneessa on kerättävä kohde. Voit poimia sen valikosta reppuusi.")
+    
+
+    uusi_huone.item = Item(saalis["nimi"], saalis["paino_kg"])
+    print("Vinkki: Esine jäi maahan. Käytä toimintoa 3 poimiaksesi sen reppuun!")
 
 
-def tarkista_loppuratkaisut(pelaaja: Player) -> bool:
-    """Tarkistaa, onko pelaajalla jonkin 3 erilaisen loppuratkaisun vaatimat esineet."""
-    myrkkytynnyrit = sum(1 for item in pelaaja.items if item.name == "Vanha myrkkytynnyri")
-    on_litium = pelaaja.has_item("Litiumsuoni")
-    on_rauta = pelaaja.has_item("Rautamalmi")
-    kivimurskat = sum(1 for item in pelaaja.items if item.name == "Kivimurska")
-    on_nayte = pelaaja.has_item("Kallionäyte")
-
-    print("\n--- RATKAISUMAHDOLLISUUDET ---")
-    print("1. Puhdas energia (Vaatii: Litiumsuoni + Rautamalmi)")
-    print("2. Pohjaveden suojelu (Vaatii: 2x Vanha myrkkytynnyri kierrätykseen)")
-    print("3. Alueen ennallistus (Vaatii: 2x Kivimurska + 1x Kallionäyte)")
-    print("4. Jatka tutkimista vielä")
-
-    valinta = input("Valitse suoritettava ratkaisu (1-4): ").strip()
-
-    # lopetus: 1
-    if valinta == "1":
-        if on_litium and on_rauta:
-            print("\n" + "=" * 50)
-            print("Lopetus: 1")
-            print(f"Hienoa työtä, {pelaaja.name}! Toimitit litiumin ja raudan tutkimusaseman")
-            print("uuden akkuvaraston rakentamiseen. Alue saa nyt vakaata uusiutuvaa sähköä.")
-            print("=" * 50)
-            return True
-        print("\nSinulla ei ole vielä riittävästi litiumia ja rautaa tähän ratkaisuun.")
-
-    # lopetus: 2
-    elif valinta == "2":
-        if myrkkytynnyrit >= 2:
-            print("\n" + "=" * 50)
-            print("Lopetus: 2")
-            print(f"Erinomaista toimintaa, {pelaaja.name}! Keräsit ja toimitit vaaralliset")
-            print("kemikaalijätteet turvalliseen jatkokäsittelyyn. Pohjavesi on pelastettu!")
-            print("=" * 50)
-            return True
-        print(f"\nTarvitset 2 tynnyriä. Sinulla on hallussasi vasta {myrkkytynnyrit} kpl.")
-
-    # Lopetus: 3
-    elif valinta == "3":
-        if kivimurskat >= 2 and on_nayte:
-            print("\n" + "=" * 50)
-            print("Lopetus: 3")
-            print(f"Loistavaa, {pelaaja.name}! Käytit murskatun kiviaineksen sortumavaarassa")
-            print("olevien tunneleiden tukemiseen ja toimitit näytteen ympäristökeskukselle.")
-            print("=" * 50)
-            return True
-        print("\nTarvitset vähintään 2 kivimurskaa ja 1 kallionäytteen tähän ratkaisuun.")
-
-    elif valinta == "4":
-        print("Jatketaan alueen tutkimista.")
-    else:
-        print("Virheellinen valinta.")
-
-    return False
+def _paivita_koordinaatit(pelaaja: Player, suunta: str):
+    if suunta == "pohjoinen": pelaaja.y += 1
+    elif suunta == "etela": pelaaja.y -= 1
+    elif suunta == "ita": pelaaja.x += 1
+    elif suunta == "lansi": pelaaja.x -= 1
+    elif suunta == "alas": pelaaja.syvyys += 1
 
 
-def poimi_esine(pelaaja: Player) -> None:
-    """Ottaa huoneen esineen pelaajan reppuun."""
+def poimi_esine_maasta(pelaaja: Player):
     esine = pelaaja.collect_item()
     if esine:
         print(f"\nPoimit reppuun kohteen: {esine.name} ({esine.weight:.1f} kg)")
@@ -292,9 +242,8 @@ def poimi_esine(pelaaja: Player) -> None:
         print("\nTässä huoneessa ei ole mitään poimittavaa.")
 
 
-def lisaa_oma_muistiinpano(pelaaja: Player) -> None:
-    """Mahdollistaa pelaajan oman vapaan tekstimerkinnän lisäämisen reppuun."""
-    nimi = input("\nKirjoita muistiinpanon tai merkinnän nimi: ").strip()
+def lisaa_esine_manuaalisesti(pelaaja: Player):
+    nimi = input("\nKirjoita esineen nimi, jonka haluat heittää reppuun: ").strip()
     if nimi:
         pelaaja.items.append(Item(f"Muistiinpano: {nimi}", 0.1, "muistiinpano"))
         print(f"Muistiinpano '{nimi}' lisätty kenttäpäiväkirjaan.")
@@ -302,9 +251,9 @@ def lisaa_oma_muistiinpano(pelaaja: Player) -> None:
         print("Merkintä ei voi olla tyhjä.")
 
 
-def tulosta_reppu(pelaaja: Player) -> None:
-    """Näyttää pelaajan repun sisällön ja kokonaispainon."""
-    print("\n--- KENTTÄREPUN SISÄLTÖ ---")
+def nayta_reppu(pelaaja: Player):
+    """Tulostaa pelaajan items-listan sisällön."""
+    print("\n--- REPUN SISÄLTÖ ---")
     if not pelaaja.items:
         print("Reppusi on tyhjä.")
     else:
@@ -355,7 +304,7 @@ def main() -> None:
     pelaaja = None
     aloitushuone = Room("Kaivoksen tukikohta [0, 0] Syvyys 1")
 
-    # Tarkista mahdollinen vanha tallennus
+    # Kysytään haluaako pelaaja käyttää vanhaa tallennusta
     if os.path.exists(TALLENNUS_POLKU):
         valinta = input("\nLöydettiin aiempi tallennus. Ladataanko se? (k/e): ").strip().lower()
         if valinta in ("k", "kylla", "y"):
@@ -363,6 +312,7 @@ def main() -> None:
             if pelaaja:
                 print(f"\nTervetuloa takaisin kentälle, {pelaaja.name}!")
 
+    # Jos ei ole vanhaa tallenusta
     if not pelaaja:
         nimi, ika = pyyda_pelaajan_tiedot()
         pelaaja = Player(nimi, ika, aloitushuone)
@@ -381,15 +331,14 @@ def main() -> None:
         print(f"Energia: {pelaaja.energia} / 100")
         print("==========================================")
 
-        print("1. Liiku / Louhi uutta reittiä")
-        print("2. Poimi esine tai näyte maasta")
-        print("3. Tarkastele reppua ja näytteitä")
-        print("4. Kirjaa oma havainto muistiin")
-        print("5. Katso tutkijan tila ja koordinaatit")
-        print("6. Lepää tukikohdassa")
-        print("7. Yritä loppuratkaisua (3 vaihtoehtoista reittiä)")
-        print("8. Tallenna peli")
-        print("9. Lopeta peli")
+        print("1. Louhi tietä eteenpäin (Liiku / Kaiva)")
+        print("2. Tarkastele reppua")
+        print("3. Poimi esine maasta (collect_item)")
+        print("4. Lisää esine manuaalisesti")
+        print("5. Katso tilanne ja koordinaatit")
+        print("6. Lepää ja palauta energia")
+        print("7. Tallenna peli")
+        print("8. Poistu kaivoksesta")
 
         valinta = input("Valitse toiminto (1-9): ").strip()
 

@@ -1,8 +1,7 @@
 import random
-
+number = random.randint(0, 10)
 while True:
     guess = float(input("Arvaa numero 0-10: "))
-    number = random.randint(0, 10)
     if guess == number:
         print("Arvasit oikein!!!")
         break
