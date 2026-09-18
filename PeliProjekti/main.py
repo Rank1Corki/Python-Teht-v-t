@@ -202,7 +202,7 @@ def louhi_ja_liiku(pelaaja: Player) -> None:
     pelaaja.energia -= 10
     print("\nIsket hakulla kalliota ja murrat reitin eteenpäin...")
 
-    _paivita_koordinaatit(pelaaja, suunta)
+    paivita_koordinaatit(pelaaja, suunta)
     if suunta == "alas":
         print(f"Kaivoit kuilun syvemmälle! Olet nyt syvyystasolla {pelaaja.syvyys}.")
 
@@ -215,23 +215,27 @@ def louhi_ja_liiku(pelaaja: Player) -> None:
     pelaaja.move(uusi_huone)
 
 
-    mahdolliset = [l for l in LÖYDÖT if pelaaja.syvyys >= l["min_syvyys"]]
-    painot = [l["painokerroin"] for l in mahdolliset]
-    saalis = random.choices(mahdolliset, weights=painot, k=1)[0]
+    mahdolliset = []
+
+    for loyto in LÖYDÖT:
+        if pelaaja.syvyys >= loyto["min_syvyys"]:
+            mahdolliset.append(loyto)
+
+    painot = []
+
+    for loyto in mahdolliset:
+        painot.append(loyto["painokerroin"])
+    saaliit = random.choices(mahdolliset, weights=painot, k=1)
+    saalis = saaliit[0]
+
+
 
     print(saalis["viesti"])
     
 
-    uusi_huone.item = Item(saalis["nimi"], saalis["paino_kg"])
+    uusi_huone.item = Item(saalis["nimi"], saalis["paino_kg"], saalis["kategoria"])
     print("Vinkki: Esine jäi maahan. Käytä toimintoa 3 poimiaksesi sen reppuun!")
 
-
-def _paivita_koordinaatit(pelaaja: Player, suunta: str):
-    if suunta == "pohjoinen": pelaaja.y += 1
-    elif suunta == "etela": pelaaja.y -= 1
-    elif suunta == "ita": pelaaja.x += 1
-    elif suunta == "lansi": pelaaja.x -= 1
-    elif suunta == "alas": pelaaja.syvyys += 1
 
 
 def poimi_esine_maasta(pelaaja: Player):
@@ -332,8 +336,8 @@ def main() -> None:
         print("==========================================")
 
         print("1. Louhi tietä eteenpäin (Liiku / Kaiva)")
-        print("2. Tarkastele reppua")
-        print("3. Poimi esine maasta (collect_item)")
+        print("2. Poimi esine maasta (collect_item)")
+        print("3. Tarkastele reppua")
         print("4. Lisää esine manuaalisesti")
         print("5. Katso tilanne ja koordinaatit")
         print("6. Lepää ja palauta energia")
@@ -346,23 +350,19 @@ def main() -> None:
             case "1":
                 louhi_ja_liiku(pelaaja)
             case "2":
-                poimi_esine(pelaaja)
+                poimi_esine_maasta(pelaaja)
             case "3":
-                tulosta_reppu(pelaaja)
+                nayta_reppu(pelaaja)
             case "4":
-                lisaa_oma_muistiinpano(pelaaja)
+                lisaa_esine_manuaalisesti(pelaaja)
             case "5":
                 tulosta_tiedot(pelaaja)
             case "6":
                 lepaa(pelaaja)
             case "7":
-                if tarkista_loppuratkaisut(pelaaja):
-                    print("\nOnneksi olkoon, läpäisit pelin!")
-                    break
-            case "8":
                 tallenna_peli(pelaaja)
-            case "9":
-                print("\nLopetit pelin ja poistuit alueelta.")
+            case "8":
+                print("lopetit Pelin")
                 break
             case _:
                 print("Virheellinen valinta. Valitse numero väliltä 1-9.")

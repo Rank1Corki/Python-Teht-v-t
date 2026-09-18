@@ -4,10 +4,10 @@ def noppa(tahkot):
     numero = random.randint(1, tahkot)
     return numero
     
-tahkot1 = int(input("Kuinka monta sivua nopassa on: "))
+numero = int(input("Anna Numero 1-6: "))
 
 while True:
-    numero = noppa(tahkot1)
-    print(numero)
-    if numero == tahkot1:
+    numero1 = noppa(numero)
+    print(numero1)
+    if numero1 == numero:
         break
