@@ -163,6 +163,47 @@ def lataa_peli() -> Player | None:
         return None
 
 
+def poista_tallennus_pelin_paattyessa():
+    """Poistaa savegame-tiedoston, jotta voitettu peli ei jatku vanhasta tilasta."""
+    if os.path.exists(TALLENNUS_POLKU):
+        try:
+            os.remove(TALLENNUS_POLKU)
+        except OSError:
+            pass
+
+
+def tarkista_lopetukset(pelaaja: Player) -> bool:
+    """Tarkistaa täyttääkö pelaaja jonkin kolmesta lopetusehdosta poistuessaan."""
+    print("\nValmistaudut poistumaan kaivosalueelta ja raportoimaan tuloksistasi...")
+    
+    # Lasketaan tarvittavat esineet repusta
+    litium_kpl = sum(1 for item in pelaaja.items if item.name == "Litiumsuoni")
+    rauta_kpl = sum(1 for item in pelaaja.items if item.name == "Rautamalmi")
+    tynnyri_kpl = sum(1 for item in pelaaja.items if item.name == "Vanha myrkkytynnyri")
+    murska_kpl = sum(1 for item in pelaaja.items if item.name == "Kivimurska")
+    nayte_kpl = sum(1 for item in pelaaja.items if item.name == "Kallionäyte")
+
+    # // Lisätään vähän lopetuksia mihin peli voi loppua
+    
+    # 1. Sähköaseman akut
+    if litium_kpl >= 1 and rauta_kpl >= 1:
+        print("\n=======================================================")
+        print("🏆 LOPETUS 1: VIHREÄ ENERGIAVALMENNUS")
+        print("Sait kerättyä akkutuotantoon sopivaa litiumia ja rautamalmia!")
+        print("Alueelle rakennetaan moderni aurinkosähköasema, ja sen")
+        print("akusto varmistaa puhtaan energian jakelun lähikylille.")
+        print("=======================================================")
+        poista_tallennus_pelin_paattyessa()
+        return True
+
+
+    else:
+        print("\nTyö on yhä kesken.")
+        print("Reppusi ei sisältänyt riittävästi materiaaleja mihinkään")
+        print("kolmesta tavoitteesta.")
+        return False
+
+
 def paivita_koordinaatit(pelaaja: Player, suunta: str) -> None:
     """Päivittää pelaajan sijaintikoordinaatit liikkumissuunnan perusteella."""
     if suunta == "pohjoinen":
@@ -342,7 +383,8 @@ def main() -> None:
         print("5. Katso tilanne ja koordinaatit")
         print("6. Lepää ja palauta energia")
         print("7. Tallenna peli")
-        print("8. Poistu kaivoksesta")
+        print("8. Tarkista lopetus vaatimukset")
+        print("9. Poistu kaivoksesta")
 
         valinta = input("Valitse toiminto (1-9): ").strip()
 
@@ -362,6 +404,8 @@ def main() -> None:
             case "7":
                 tallenna_peli(pelaaja)
             case "8":
+                tarkista_lopetukset(pelaaja)
+            case "9":
                 print("lopetit Pelin")
                 break
             case _:
