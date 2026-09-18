@@ -17,7 +17,7 @@ class Hissi:
 
 
 class Talo:
-    def __init__(self,alin_kerros, ylin_kerros, hissien_lkm=5):
+    def __init__(self,alin_kerros, ylin_kerros, hissien_lkm):
         self.alin = alin_kerros
         self.ylin = ylin_kerros
         self.hissit = []
@@ -41,9 +41,9 @@ class Talo:
 
     def palohälytys(self):
         for i in range(len(self.hissit)):
-            hissin_nmr = i + 1 
+            hissin_nmr = i + 1
             self.aja_hissiä(hissin_nmr, self.alin)
-
+            
 
 if __name__ == "__main__":
     talo = Talo(1, 10, 4)

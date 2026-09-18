@@ -1,0 +1,30 @@
+class Julkaisu:
+    def __init__(self, nimi, tekijä):
+        self.nimi = nimi
+        self.tekijä = tekijä
+
+
+class Kirjailija(Julkaisu):
+    def __init__(self, nimi, kirjailija, sivumäärä):
+        super().__init__(nimi, kirjailija)
+        self.sivumäärä = sivumäärä
+
+    def __repr__(self):
+        return f"Kirja: {self.nimi} | Kirjailija: {self.tekijä} | Sivumäärä: {self.sivumäärä}"
+
+
+class Lehti(Julkaisu):
+    def __init__(self, nimi, toimittaja):
+        super().__init__(nimi, toimittaja)
+        self.toimittaja = toimittaja
+
+    def __repr__(self):
+        return f"Lehti: {self.nimi} | Päätoimittaja: {self.toimittaja}"
+
+
+lehti = Lehti("Aku Ankka", "Aki Hyyppä")
+kirja = Kirjailija("Hytti nro 6", "Rosa Liksom", 250)
+
+
+print(lehti)
+print(kirja)
