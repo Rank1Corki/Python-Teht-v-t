@@ -188,7 +188,7 @@ def tarkista_lopetukset(pelaaja: Player) -> bool:
     # 1. Sähköaseman akut
     if litium_kpl >= 1 and rauta_kpl >= 1:
         print("\n=======================================================")
-        print("🏆 LOPETUS 1: VIHREÄ ENERGIAVALMENNUS")
+        print("LOPETUS 1: VIHREÄ ENERGIAVALMENNUS")
         print("Sait kerättyä akkutuotantoon sopivaa litiumia ja rautamalmia!")
         print("Alueelle rakennetaan moderni aurinkosähköasema, ja sen")
         print("akusto varmistaa puhtaan energian jakelun lähikylille.")
@@ -197,6 +197,24 @@ def tarkista_lopetukset(pelaaja: Player) -> bool:
         return True
 
 
+    if tynnyri_kpl >= 4:
+        print("\n======================================================================")
+        print("Lopetus 2: VESISTÖN PELASTUS")
+        print("Keräsit ongelma jäte tynnyrit luolastosta ja pelastit alueen vesistöt.")
+        print("Alueella asuvat voivat elää rauhassa taas!")
+        print("========================================================================")
+        poista_tallennus_pelin_paattyessa()
+        return True
+
+    if nayte_kpl >= 5 and murska_kpl >= 5  :
+        print("\n======================================================================")
+        print("LOPETUS 3: MAAPERÄTUTKIMUS JA GEOLOGINEN LÄPIMURTO")
+        print("Toimitit laboratorioon kattavan sarjan harvinaisia kallionäytteitä!")
+        print("Tieteellinen panoksesi kaivoksen kartoittamisessa on korvaamaton!")
+        print("======================================================================")
+        poista_tallennus_pelin_paattyessa()
+        return True
+    
     else:
         print("\nTyö on yhä kesken.")
         print("Reppusi ei sisältänyt riittävästi materiaaleja mihinkään")
