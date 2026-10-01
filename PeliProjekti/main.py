@@ -424,7 +424,7 @@ def main() -> None:
             case "8":
                 tarkista_lopetukset(pelaaja)
             case "9":
-                print("lopetit Pelin")
+                print(f"Hei hei {pelaaja.name}")
                 break
             case _:
                 print("Virheellinen valinta. Valitse numero väliltä 1-9.")
