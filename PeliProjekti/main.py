@@ -3,6 +3,7 @@ import random
 from models.item import Item
 from models.room import Room
 from models.player import Player
+from models.savegame import Save
 
 SKRIPTIN_KANSIO = os.path.dirname(os.path.abspath(__file__))
 DATA_KANSIO = os.path.join(SKRIPTIN_KANSIO, "data")
@@ -100,77 +101,6 @@ def alusta_tekstitiedostot() -> None:
             )
 
 
-def lue_tiedosto(polku: str) -> str:
-    """Lukee annetussa tiedostopolussa olevan sisällön merkkijonona."""
-    if os.path.exists(polku):
-        with open(polku, "r", encoding="utf-8") as f:
-            return f.read().strip()
-    return f"Tiedostoa {polku} ei löytynyt."
-
-
-def tallenna_peli(pelaaja: Player) -> bool:
-    """Tallentaa pelaajan tiedot ja repun sisällön tiedostoon."""
-    try:
-        os.makedirs(DATA_KANSIO, exist_ok=True)
-        with open(TALLENNUS_POLKU, "w", encoding="utf-8") as f:
-            f.write(f"{pelaaja.name};{pelaaja.age};{pelaaja.energia};{pelaaja.x};{pelaaja.y};{pelaaja.syvyys};{pelaaja.location.name}\n")
-            for item in pelaaja.items:
-                f.write(f"{item.name};{item.weight};{item.category}\n")
-        print(f"\nPeli tallennettu onnistuneesti tiedostoon: {TALLENNUS_POLKU}")
-        return True
-    except OSError as e:
-        print(f"Tallennus epäonnistui: {e}")
-        return False
-
-
-def lataa_peli() -> Player | None:
-    """Lataa tallennetun pelin tilan tiedostosta ja palauttaa Player-olion."""
-    if not os.path.exists(TALLENNUS_POLKU):
-        return None
-
-    try:
-        with open(TALLENNUS_POLKU, "r", encoding="utf-8") as f:
-            rivit = [r.strip() for r in f.readlines() if r.strip()]
-
-        if not rivit:
-            return None
-
-        perustiedot = rivit[0].split(";")
-        nimi = perustiedot[0]
-        ika = int(perustiedot[1])
-        energia = int(perustiedot[2])
-        x = int(perustiedot[3])
-        y = int(perustiedot[4])
-        syvyys = int(perustiedot[5])
-        huoneen_nimi = perustiedot[6]
-
-        huone = Room(huoneen_nimi)
-        pelaaja = Player(nimi, ika, huone)
-        pelaaja.energia = energia
-        pelaaja.x = x
-        pelaaja.y = y
-        pelaaja.syvyys = syvyys
-
-        for item_rivi in rivit[1:]:
-            osat = item_rivi.split(";")
-            if len(osat) >= 2:
-                kategoria = osat[2] if len(osat) > 2 else "materiaali"
-                pelaaja.items.append(Item(osat[0], float(osat[1]), kategoria))
-
-        return pelaaja
-    except (ValueError, IndexError, OSError) as e:
-        print(f"Virhe tallennuksen latauksessa: {e}")
-        return None
-
-
-def poista_tallennus_pelin_paattyessa():
-    """Poistaa savegame-tiedoston, jotta voitettu peli ei jatku vanhasta tilasta."""
-    if os.path.exists(TALLENNUS_POLKU):
-        try:
-            os.remove(TALLENNUS_POLKU)
-        except OSError:
-            pass
-
 
 def tarkista_lopetukset(pelaaja: Player) -> bool:
     """Tarkistaa täyttääkö pelaaja jonkin kolmesta lopetusehdosta poistuessaan."""
@@ -193,7 +123,7 @@ def tarkista_lopetukset(pelaaja: Player) -> bool:
         print("Alueelle rakennetaan moderni aurinkosähköasema, ja sen")
         print("akusto varmistaa puhtaan energian jakelun lähikylille.")
         print("=======================================================")
-        poista_tallennus_pelin_paattyessa()
+        Save.poista_tallennus_pelin_paattyessa()
         return True
 
 
@@ -203,7 +133,7 @@ def tarkista_lopetukset(pelaaja: Player) -> bool:
         print("Keräsit ongelma jäte tynnyrit luolastosta ja pelastit alueen vesistöt.")
         print("Alueella asuvat voivat elää rauhassa taas!")
         print("========================================================================")
-        poista_tallennus_pelin_paattyessa()
+        Save.poista_tallennus_pelin_paattyessa()
         return True
 
     if nayte_kpl >= 5 and murska_kpl >= 5  :
@@ -212,7 +142,7 @@ def tarkista_lopetukset(pelaaja: Player) -> bool:
         print("Toimitit laboratorioon kattavan sarjan harvinaisia kallionäytteitä!")
         print("Tieteellinen panoksesi kaivoksen kartoittamisessa on korvaamaton!")
         print("======================================================================")
-        poista_tallennus_pelin_paattyessa()
+        Save.poista_tallennus_pelin_paattyessa()
         return True
     
     else:
@@ -362,7 +292,7 @@ def pyyda_pelaajan_tiedot() -> tuple[str, int]:
 def main() -> None:
     """Pelin pääohjelma"""
     alusta_tekstitiedostot()
-    print(lue_tiedosto(INTRO_POLKU))
+    print(Save.lue_tiedosto(INTRO_POLKU))
 
     pelaaja = None
     aloitushuone = Room("Kaivoksen tukikohta [0, 0] Syvyys 1")
@@ -371,7 +301,7 @@ def main() -> None:
     if os.path.exists(TALLENNUS_POLKU):
         valinta = input("\nLöydettiin aiempi tallennus. Ladataanko se? (k/e): ").strip().lower()
         if valinta in ("k", "kylla", "y"):
-            pelaaja = lataa_peli()
+            pelaaja = Save.lataa_peli()
             if pelaaja:
                 print(f"\nTervetuloa takaisin kentälle, {pelaaja.name}!")
 
@@ -381,7 +311,7 @@ def main() -> None:
         pelaaja = Player(nimi, ika, aloitushuone)
         print(f"\nTervetuloa tutkimusalueelle, {pelaaja.name}!")
 
-    print("\n" + lue_tiedosto(OHJEET_POLKU))
+    print("\n" + Save.lue_tiedosto(OHJEET_POLKU))
 
     # Pääsilmukka
     while True:
@@ -420,7 +350,7 @@ def main() -> None:
             case "6":
                 lepaa(pelaaja)
             case "7":
-                tallenna_peli(pelaaja)
+                Save.tallenna_peli(pelaaja)
             case "8":
                 tarkista_lopetukset(pelaaja)
             case "9":
