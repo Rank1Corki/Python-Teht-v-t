@@ -25,7 +25,7 @@ LÖYDÖT = [
     {
         "nimi": "Vanha myrkkytynnyri",
         "paino_kg": 5.0,
-        "kategoria": "jate",
+        "kategoria": "jäte",
         "min_syvyys": 1,
         "painokerroin": 25,
         "viesti": "Löysit vanhan hylätyn kemikaalitynnyrin, joka uhkaa vuotaa pohjaveteen!"
@@ -120,7 +120,7 @@ def tarkista_lopetukset(pelaaja: Player) -> bool:
         print("\n=======================================================")
         print("LOPETUS 1: VIHREÄ ENERGIAVALMENNUS")
         print("Sait kerättyä akkutuotantoon sopivaa litiumia ja rautamalmia!")
-        print("Alueelle rakennetaan moderni aurinkosähköasema, ja sen")
+        print("Alueelle rakennetaan aurinkosähköasema, ja sen")
         print("akusto varmistaa puhtaan energian jakelun lähikylille.")
         print("=======================================================")
         Save.poista_tallennus_pelin_paattyessa()
@@ -139,7 +139,7 @@ def tarkista_lopetukset(pelaaja: Player) -> bool:
     if nayte_kpl >= 5 and murska_kpl >= 5  :
         print("\n======================================================================")
         print("LOPETUS 3: MAAPERÄTUTKIMUS JA GEOLOGINEN LÄPIMURTO")
-        print("Toimitit laboratorioon kattavan sarjan harvinaisia kallionäytteitä!")
+        print("Toit labraan kallionäytteitä ja kalliomurskaa!")
         print("Tieteellinen panoksesi kaivoksen kartoittamisessa on korvaamaton!")
         print("======================================================================")
         Save.poista_tallennus_pelin_paattyessa()
@@ -223,7 +223,7 @@ def louhi_ja_liiku(pelaaja: Player) -> None:
     
 
     uusi_huone.item = Item(saalis["nimi"], saalis["paino_kg"], saalis["kategoria"])
-    print("Vinkki: Esine jäi maahan. Käytä toimintoa 3 poimiaksesi sen reppuun!")
+    print("Vinkki: Poimi esine maasta toiminnolla 3!")
 
 
 
