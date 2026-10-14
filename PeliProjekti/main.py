@@ -25,7 +25,7 @@ LÖYDÖT = [
     {
         "nimi": "Vanha myrkkytynnyri",
         "paino_kg": 5.0,
-        "kategoria": "jäte",
+        "kategoria": "jate",
         "min_syvyys": 1,
         "painokerroin": 25,
         "viesti": "Löysit vanhan hylätyn kemikaalitynnyrin, joka uhkaa vuotaa pohjaveteen!"
@@ -82,8 +82,7 @@ def alusta_tekstitiedostot() -> None:
     if not os.path.exists(INTRO_POLKU):
         with open(INTRO_POLKU, "w", encoding="utf-8") as f:
             f.write(
-                "=== OPERAATIO PUHDAS MAAPERÄ ===\n"
-                "Olet saapunut vanhalle hylätylle kaivokselle ympäristötutkijana.\n"
+                "Olet saapunut kaivokselle ympäristötutkijana.\n"
                 "Tavoitteesi on ennallistaa alue ja viedä maaliin yksi kolmesta ratkaisusta:\n"
                 " 1. Rakenna aurinkosähköaseman akusto (Litiumsuoni + Rautamalmi)\n"
                 " 2. Suojaa pohjavesi keräämällä vaaralliset jätteet (2 kpl Vanha myrkkytynnyri)\n"
@@ -120,8 +119,6 @@ def tarkista_lopetukset(pelaaja: Player) -> bool:
         print("\n=======================================================")
         print("LOPETUS 1: VIHREÄ ENERGIAVALMENNUS")
         print("Sait kerättyä akkutuotantoon sopivaa litiumia ja rautamalmia!")
-        print("Alueelle rakennetaan aurinkosähköasema, ja sen")
-        print("akusto varmistaa puhtaan energian jakelun lähikylille.")
         print("=======================================================")
         Save.poista_tallennus_pelin_paattyessa()
         return True
@@ -131,7 +128,6 @@ def tarkista_lopetukset(pelaaja: Player) -> bool:
         print("\n======================================================================")
         print("Lopetus 2: VESISTÖN PELASTUS")
         print("Keräsit ongelma jäte tynnyrit luolastosta ja pelastit alueen vesistöt.")
-        print("Alueella asuvat voivat elää rauhassa taas!")
         print("========================================================================")
         Save.poista_tallennus_pelin_paattyessa()
         return True
@@ -139,8 +135,7 @@ def tarkista_lopetukset(pelaaja: Player) -> bool:
     if nayte_kpl >= 5 and murska_kpl >= 5  :
         print("\n======================================================================")
         print("LOPETUS 3: MAAPERÄTUTKIMUS JA GEOLOGINEN LÄPIMURTO")
-        print("Toit labraan kallionäytteitä ja kalliomurskaa!")
-        print("Tieteellinen panoksesi kaivoksen kartoittamisessa on korvaamaton!")
+        print("Toimitit laboratorioon kattavan sarjan harvinaisia kallionäytteitä!")
         print("======================================================================")
         Save.poista_tallennus_pelin_paattyessa()
         return True
@@ -183,13 +178,13 @@ def louhi_ja_liiku(pelaaja: Player) -> None:
 
 
     if suunta in pelaaja.location.exits:
-        print("\nReitti on jo valmiina, siirrytään käytävää pitkin...")
+        print("\nSiirryt tyhjään jo louhittuun huoneeseen.")
         pelaaja.move(pelaaja.location.exits[suunta])
         paivita_koordinaatit(pelaaja, suunta)
         return
 
     pelaaja.energia -= 10
-    print("\nIsket hakulla kalliota ja murrat reitin eteenpäin...")
+    print("\nMurrat reitin eteenpäin")
 
     paivita_koordinaatit(pelaaja, suunta)
     if suunta == "alas":
@@ -223,7 +218,7 @@ def louhi_ja_liiku(pelaaja: Player) -> None:
     
 
     uusi_huone.item = Item(saalis["nimi"], saalis["paino_kg"], saalis["kategoria"])
-    print("Vinkki: Poimi esine maasta toiminnolla 3!")
+    print("Vinkki: Esine jäi maahan.")
 
 
 
@@ -246,7 +241,7 @@ def lisaa_esine_manuaalisesti(pelaaja: Player):
 
 def nayta_reppu(pelaaja: Player):
     """Tulostaa pelaajan items-listan sisällön."""
-    print("\n--- REPUN SISÄLTÖ ---")
+    print("\nReppu")
     if not pelaaja.items:
         print("Reppusi on tyhjä.")
     else:
@@ -282,7 +277,7 @@ def pyyda_pelaajan_tiedot() -> tuple[str, int]:
         try:
             ika = int(input("Anna ikä: "))
             if ika < 12:
-                print("Peli on suunnattu vähintään 12-vuotiaille turvallisuussyistä.")
+                print("Anna ikä 12 tai yli")
                 continue
             return nimi, ika
         except ValueError:
@@ -295,11 +290,11 @@ def main() -> None:
     print(Save.lue_tiedosto(INTRO_POLKU))
 
     pelaaja = None
-    aloitushuone = Room("Kaivoksen tukikohta [0, 0] Syvyys 1")
+    aloitushuone = Room("Kaivoksen alku/keskipiste [0, 0] Syvyys 1")
 
     # Kysytään haluaako pelaaja käyttää vanhaa tallennusta
     if os.path.exists(TALLENNUS_POLKU):
-        valinta = input("\nLöydettiin aiempi tallennus. Ladataanko se? (k/e): ").strip().lower()
+        valinta = input("\nKäytetäänkö vanhaa tallenusta (kylla/ei): ").strip().lower()
         if valinta in ("k", "kylla", "y"):
             pelaaja = Save.lataa_peli()
             if pelaaja:
@@ -324,17 +319,16 @@ def main() -> None:
         print(f"Energia: {pelaaja.energia} / 100")
         print("==========================================")
 
-        print("1. Louhi tietä eteenpäin (Liiku / Kaiva)")
-        print("2. Poimi esine maasta (collect_item)")
-        print("3. Tarkastele reppua")
-        print("4. Lisää esine manuaalisesti")
-        print("5. Katso tilanne ja koordinaatit")
-        print("6. Lepää ja palauta energia")
-        print("7. Tallenna peli")
-        print("8. Tarkista lopetus vaatimukset")
-        print("9. Poistu kaivoksesta")
+        print("1. Louhi (Liiku / Kaiva)")
+        print("2. Collect item")
+        print("3. Tarkastele inventory")
+        print("4. Katso tilanne ja koordinaatit")
+        print("5. Lepää ja palauta energia")
+        print("6. Tallenna peli")
+        print("7. Tarkista lopetus vaatimukset")
+        print("8. Poistu kaivoksesta")
 
-        valinta = input("Valitse toiminto (1-9): ").strip()
+        valinta = input("1-8: ").strip()
 
         match valinta:
             case "1":
@@ -344,20 +338,18 @@ def main() -> None:
             case "3":
                 nayta_reppu(pelaaja)
             case "4":
-                lisaa_esine_manuaalisesti(pelaaja)
-            case "5":
                 tulosta_tiedot(pelaaja)
-            case "6":
+            case "5":
                 lepaa(pelaaja)
-            case "7":
+            case "6":
                 Save.tallenna_peli(pelaaja)
-            case "8":
+            case "7":
                 tarkista_lopetukset(pelaaja)
-            case "9":
+            case "8":
                 print(f"Hei hei {pelaaja.name}")
                 break
             case _:
-                print("Virheellinen valinta. Valitse numero väliltä 1-9.")
+                print("Valitse numero väliltä 1-9.")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,6 @@
+eetu;715;0;1;7;2;Kammio [1, 7] S2
+Vanha myrkkytynnyri;5.0;jate
+Vanha myrkkytynnyri;5.0;jate
+Kivimurska;2.0;materiaali
+Kivimurska;2.0;materiaali
+Rautamalmi;4.0;materiaali
