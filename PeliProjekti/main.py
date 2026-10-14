@@ -349,7 +349,7 @@ def main() -> None:
                 print(f"Hei hei {pelaaja.name}")
                 break
             case _:
-                print("Valitse numero väliltä 1-9.")
+                print("Valitse numero väliltä 1-8.")
 
 
 if __name__ == "__main__":
