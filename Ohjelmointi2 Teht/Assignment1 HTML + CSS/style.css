@@ -1,0 +1,67 @@
+    body {
+      font-family: "Comic Sans MS", cursive;
+      background-color: #a8a8a8;
+      margin: 0%;
+      padding: 0%;
+    }
+
+    h1 {
+      background-color: rgb(183, 183, 183);
+      color: white;
+      width: 100%;
+      margin: 0;
+    }
+
+    .logo-box {
+    background-color: gray; 
+    color: white; 
+    padding: 20px;  
+    }
+
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .floating-image {
+      float: right;
+      padding: 20px;
+      border-radius: 15px;
+    }
+
+    .image-box {
+    background-color: gray; 
+    color: white; 
+    padding: 20px;  
+    }
+
+    .center {
+      display: flex;           
+      justify-content: center; 
+      gap: 15px;               
+    }
+
+    a:link {
+      color: white;
+      background-color: transparent;
+      text-decoration: none;
+      display: inline-block; 
+      padding: 8px 16px; 
+      transition: all 0.3s ease-in-out; 
+    }
+
+    a:hover {
+      box-shadow: inset 400px 0 0 0 #54b3d6; 
+      color: white;
+    }
+
+
+    .keskikuva {
+      display: flex;
+      justify-content: center;
+    }
+
+    .text-center {
+      text-align: center;
+    }
