@@ -12,7 +12,7 @@ INTRO_POLKU = os.path.join(DATA_KANSIO, "intro.txt")
 OHJEET_POLKU = os.path.join(DATA_KANSIO, "instructions.txt")
 TALLENNUS_POLKU = os.path.join(DATA_KANSIO, "savegame.txt")
 
-# Kestävän kehityksen ja kaivauksen materiaalit
+
 LÖYDÖT = [
     {
         "nimi": "Kivimurska",

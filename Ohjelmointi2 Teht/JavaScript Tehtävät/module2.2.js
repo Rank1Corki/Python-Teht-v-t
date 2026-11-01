@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultDisplay = document.getElementById("resultDisplay");
 
   button.addEventListener("click", () => {
-    let inputValue = Number(prompt("How many dice do you want"));
+    let inputValue = Number(prompt("How many dice do u need me to calculate"));
     let summa = Number(prompt("Give the sum of the dice u want it to be"))
     
     const result = getDiceSumProbability  (inputValue, summa);
