@@ -20,7 +20,7 @@ LÖYDÖT = [
         "kategoria": "materiaali",
         "min_syvyys": 1,
         "painokerroin": 50,
-        "viesti": "Murskasit kiveä. Maahan jää tiivistä kiviainesta maaperän vahvistamiseen."
+        "viesti": "Murskasit kiveä."
     },
     {
         "nimi": "Vanha myrkkytynnyri",
@@ -28,7 +28,7 @@ LÖYDÖT = [
         "kategoria": "jate",
         "min_syvyys": 1,
         "painokerroin": 25,
-        "viesti": "Löysit vanhan hylätyn kemikaalitynnyrin, joka uhkaa vuotaa pohjaveteen!"
+        "viesti": "Löysit vanhan hylätyn kemikaalitynnyrin!"
     },
     {
         "nimi": "Rautamalmi",
@@ -44,7 +44,7 @@ LÖYDÖT = [
         "kategoria": "materiaali",
         "min_syvyys": 2,
         "painokerroin": 15,
-        "viesti": "Löysit arvokasta litiumia energiantuotannon akkuihin!"
+        "viesti": "Löysit litiumia akkuihin!"
     },
     {
         "nimi": "Kallionäyte",
@@ -52,7 +52,7 @@ LÖYDÖT = [
         "kategoria": "tutkimus",
         "min_syvyys": 3,
         "painokerroin": 10,
-        "viesti": "Löysit harvinaisen kallioperänäytteen geologista tutkimusta varten."
+        "viesti": "Löysit kallioperännäytteen."
     }
 ]
 
@@ -76,7 +76,6 @@ SUUNTA_LYHENTEET = {
 
 
 def alusta_tekstitiedostot() -> None:
-    """Luo pelin tarvitseman kansiorakenteen ja aloitusohjeet tarvittaessa."""
     os.makedirs(DATA_KANSIO, exist_ok=True)
 
     if not os.path.exists(INTRO_POLKU):
@@ -102,19 +101,15 @@ def alusta_tekstitiedostot() -> None:
 
 
 def tarkista_lopetukset(pelaaja: Player) -> bool:
-    """Tarkistaa täyttääkö pelaaja jonkin kolmesta lopetusehdosta poistuessaan."""
     print("\nValmistaudut poistumaan kaivosalueelta ja raportoimaan tuloksistasi...")
     
-    # Lasketaan tarvittavat esineet repusta
     litium_kpl = sum(1 for item in pelaaja.items if item.name == "Litiumsuoni")
     rauta_kpl = sum(1 for item in pelaaja.items if item.name == "Rautamalmi")
     tynnyri_kpl = sum(1 for item in pelaaja.items if item.name == "Vanha myrkkytynnyri")
     murska_kpl = sum(1 for item in pelaaja.items if item.name == "Kivimurska")
     nayte_kpl = sum(1 for item in pelaaja.items if item.name == "Kallionäyte")
 
-    # // Lisätään vähän lopetuksia mihin peli voi loppua
-    
-    # 1. Sähköaseman akut
+
     if litium_kpl >= 1 and rauta_kpl >= 1:
         print("\n=======================================================")
         print("LOPETUS 1: VIHREÄ ENERGIAVALMENNUS")
@@ -148,7 +143,6 @@ def tarkista_lopetukset(pelaaja: Player) -> bool:
 
 
 def paivita_koordinaatit(pelaaja: Player, suunta: str) -> None:
-    """Päivittää pelaajan sijaintikoordinaatit liikkumissuunnan perusteella."""
     if suunta == "pohjoinen":
         pelaaja.y += 1
     elif suunta == "etela":
@@ -164,7 +158,6 @@ def paivita_koordinaatit(pelaaja: Player, suunta: str) -> None:
 
 
 def louhi_ja_liiku(pelaaja: Player) -> None:
-    """Mahdollistaa siirtymisen tai uuden huoneen louhimisen kartalle."""
     if pelaaja.energia < 10:
         print("\nEnergia on liian alhainen heiluttamaan hakkua! Lepää hetki nuotiolla.")
         return
@@ -240,7 +233,7 @@ def lisaa_esine_manuaalisesti(pelaaja: Player):
 
 
 def nayta_reppu(pelaaja: Player):
-    """Tulostaa pelaajan items-listan sisällön."""
+    """Tulostaa pelaajan repun."""
     print("\nReppu")
     if not pelaaja.items:
         print("Reppusi on tyhjä.")
@@ -262,13 +255,11 @@ def tulosta_tiedot(pelaaja: Player) -> None:
 
 
 def lepaa(pelaaja: Player) -> None:
-    """Palauttaa pelaajan energian täyteen."""
     pelaaja.energia = 100
     print("\nLepäsit tukikohdassa. Energiasi on jälleen 100!")
 
 
 def pyyda_pelaajan_tiedot() -> tuple[str, int]:
-    """Kysyy pelaajan nimen ja iän"""
     nimi = input("\nAnna tutkijan nimi: ").strip()
     if not nimi:
         nimi = "Tutkija"
@@ -285,7 +276,6 @@ def pyyda_pelaajan_tiedot() -> tuple[str, int]:
 
 
 def main() -> None:
-    """Pelin pääohjelma"""
     alusta_tekstitiedostot()
     print(Save.lue_tiedosto(INTRO_POLKU))
 
