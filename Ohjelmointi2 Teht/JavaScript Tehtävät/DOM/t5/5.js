@@ -92,3 +92,27 @@ const picArray = [
   },
 ];
 
+for (let i = 0; i < picArray.length; i++) {
+    const Option = document.createElement('article');
+    const title = document.createElement('h2');
+    title.textContent = picArray[i].title;
+    let caption = document.createElement('p');
+    caption.textContent = picArray[i].caption;
+    let description = document.createElement('p');
+    description.textContent = picArray[i].description;
+    let img = document.createElement('img');
+    img.src = picArray[i].image.large;
+    let img1 = document.createElement('img');
+    img.src = picArray[i].image.medium;
+
+    
+    
+    Option.appendChild(title);
+    Option.appendChild(caption);
+    Option.appendChild(description);
+    Option.appendChild(img);
+    Option.appendChild(img1);
+
+
+    document.getElementById("pictures").appendChild(Option);
+} 
