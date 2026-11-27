@@ -1,4 +1,3 @@
-
 const resultsContainer = document.querySelector("#results");
 
 const form = document.querySelector('#search-form');
